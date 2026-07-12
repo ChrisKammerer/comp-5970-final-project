@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'settings_screen.dart';
 
 class MainContentView extends StatefulWidget {
   const MainContentView({super.key});
@@ -14,7 +15,7 @@ class _MainContentViewState extends State<MainContentView> {
   final screens = [
     const Placeholder(), // Replace with actual screens
     const Placeholder(),
-    const Placeholder(),
+    const SettingsScreen(), // Replace with actual settings screen
   ];
 
   @override
