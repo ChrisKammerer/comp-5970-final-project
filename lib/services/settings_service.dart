@@ -7,6 +7,10 @@ class SettingsService extends ChangeNotifier {
   bool isDarkMode = false;
   static const String _darkModeKey = 'dark_mode';
 
+  SettingsService() {
+    loadSettings();
+  }
+
   Future<void> loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
     isDarkMode = prefs.getBool(_darkModeKey) ?? false;

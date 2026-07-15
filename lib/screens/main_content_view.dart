@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'recipe_browse_screen.dart';
 import 'settings_screen.dart';
 
 class MainContentView extends StatefulWidget {
@@ -13,9 +14,9 @@ class _MainContentViewState extends State<MainContentView> {
   late final PageController _pageController;
 
   final screens = [
-    const Placeholder(), // Replace with actual screens
-    const Placeholder(),
-    const SettingsScreen(), // Replace with actual settings screen
+    const RecipeBrowseScreen(),
+    const Placeholder(), // Replace with search screen
+    const SettingsScreen(), 
   ];
 
   @override

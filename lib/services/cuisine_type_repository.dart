@@ -5,6 +5,10 @@ class CuisineTypeRepository extends ChangeNotifier {
   static const String _storageKey = 'cuisine_types';
   List<String> cuisineTypes = [];
 
+  CuisineTypeRepository() {
+    loadCuisineTypes();
+  }
+
   static const List<String> _defaultCuisineTypes = [
     'Italian',
     'Chinese',
