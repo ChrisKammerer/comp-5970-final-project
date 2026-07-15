@@ -1,10 +1,13 @@
 class RecipeEntry {
+  static const String defaultImagePath = 'assets/images/default_recipe_image.png';
+  
   final int id;
   final String name;
   final String description;
   final String instructions;
   final String mealType;
   final String cuisineType;
+  String imagePath = defaultImagePath;
   final List<String> ingredients;
 
   RecipeEntry(
@@ -14,6 +17,7 @@ class RecipeEntry {
     this.instructions,
     this.mealType,
     this.cuisineType,
+    this.imagePath,
     this.ingredients,
   );
 
@@ -25,6 +29,7 @@ class RecipeEntry {
       'instructions': instructions,
       'mealType': mealType,
       'cuisineType': cuisineType,
+      'imagePath': imagePath,
       'ingredients': ingredients,
     };
   }
@@ -37,6 +42,7 @@ class RecipeEntry {
       map['instructions'],
       map['mealType'],
       map['cuisineType'],
+      map['imagePath'],
       List<String>.from(map['ingredients']),
     );
   }

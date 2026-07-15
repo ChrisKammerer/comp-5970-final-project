@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/recipe_entry_card.dart';
-import '../services/recipe_entry_repository.dart';
+import '../../widgets/recipe_entry_card.dart';
+import '../../services/recipe_entry_repository.dart';
 import 'package:provider/provider.dart';
 
 class RecipeBrowseScreen extends StatelessWidget {

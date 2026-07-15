@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'recipe_browse_screen.dart';
+import 'recipe_browse_screens/recipe_browse_screen.dart';
 import 'settings_screen.dart';
 
 class MainContentView extends StatefulWidget {
@@ -16,7 +16,7 @@ class _MainContentViewState extends State<MainContentView> {
   final screens = [
     const RecipeBrowseScreen(),
     const Placeholder(), // Replace with search screen
-    const SettingsScreen(), 
+    const SettingsScreen(),
   ];
 
   @override
@@ -58,14 +58,8 @@ class _MainContentViewState extends State<MainContentView> {
         currentIndex: selectedIndex,
         onTap: _onItemTapped,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
