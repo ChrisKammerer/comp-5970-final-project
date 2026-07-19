@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'services/settings_service.dart';
+import 'services/recipe_entry_repository.dart';
 import 'package:provider/provider.dart';
 import 'screens/welcome_screen.dart';
 
@@ -12,8 +13,15 @@ class MealOrganizer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<SettingsService>(
-      create: (context) => SettingsService(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<SettingsService>(
+          create: (context) => SettingsService(),
+        ),
+        ChangeNotifierProvider<RecipeEntryRepository>(
+          create: (context) => RecipeEntryRepository(),
+        ),
+      ],
       child: Consumer<SettingsService>(
         builder: (context, settingsService, child) {
           return MaterialApp(

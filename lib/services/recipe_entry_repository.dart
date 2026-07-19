@@ -39,4 +39,61 @@ class RecipeEntryRepository extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> addRecipeEntry(
+    String name,
+    String description,
+    String instructions,
+    String mealType,
+    String cuisineType,
+    List<String> ingredients,
+    String imagePath
+  ) async {
+    final nextId = recipeEntries.length+1;
+    final newEntry = RecipeEntry(
+      nextId,
+      name,
+      description,
+      instructions,
+      mealType,
+      cuisineType,
+      ingredients,
+      imagePath,
+    );
+
+    recipeEntries.add(newEntry);
+    await saveRecipeEntries(recipeEntries);
+    notifyListeners();
+  }
+
+  Future<void> updateRecipeEntry(
+    int id,
+    String name,
+    String description,
+    String instructions,
+    String mealType,
+    String cuisineType,
+    String imagePath,
+    List<String> ingredients,
+  ) async {
+    final index = recipeEntries.indexWhere((recipe) => recipe.id == id);
+    if (index == -1) {
+      return;
+    }
+
+    final updatedEntry = RecipeEntry(
+      id,
+      name,
+      description,
+      instructions,
+      mealType,
+      cuisineType,
+      ingredients,
+      imagePath,
+    );
+
+    recipeEntries[index] = updatedEntry;
+    await saveRecipeEntries(recipeEntries);
+    notifyListeners();
+  }
 }

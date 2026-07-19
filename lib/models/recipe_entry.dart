@@ -7,8 +7,8 @@ class RecipeEntry {
   final String instructions;
   final String mealType;
   final String cuisineType;
-  String imagePath = defaultImagePath;
   final List<String> ingredients;
+  String imagePath = defaultImagePath;
 
   RecipeEntry(
     this.id,
@@ -17,8 +17,8 @@ class RecipeEntry {
     this.instructions,
     this.mealType,
     this.cuisineType,
-    this.imagePath,
     this.ingredients,
+    this.imagePath,
   );
 
   Map<String, dynamic> toMap() {
@@ -42,8 +42,8 @@ class RecipeEntry {
       map['instructions'],
       map['mealType'],
       map['cuisineType'],
-      map['imagePath'],
       List<String>.from(map['ingredients']),
+      map['imagePath'],
     );
   }
 }
