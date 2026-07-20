@@ -1,6 +1,9 @@
+import 'dart:io';
+import 'package:flutter/widgets.dart';
+
 class RecipeEntry {
   static const String defaultImagePath = 'assets/images/default_recipe_image.png';
-  
+
   final int id;
   final String name;
   final String description;
@@ -9,6 +12,12 @@ class RecipeEntry {
   final String cuisineType;
   final List<String> ingredients;
   String imagePath = defaultImagePath;
+
+  ImageProvider get image {
+    return imagePath.startsWith('assets/')
+        ? AssetImage(imagePath)
+        : FileImage(File(imagePath)) as ImageProvider;
+  }
 
   RecipeEntry(
     this.id,

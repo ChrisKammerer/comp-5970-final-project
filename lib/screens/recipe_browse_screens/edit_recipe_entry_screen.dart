@@ -1,5 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:meal_organizer/services/recipe_entry_repository.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import '../../models/recipe_entry.dart';
 import 'package:provider/provider.dart';
 
@@ -44,6 +48,7 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
   late final TextEditingController _descriptionController;
   late final TextEditingController _instructionsController;
   late final FieldControllerGroup _ingredientsGroup;
+  late String _imagePath;
 
   @override
   void initState() {
@@ -56,6 +61,27 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
       label: 'Ingredients',
       values: e != null ? e.ingredients : [],
     );
+    _imagePath = e?.imagePath ?? RecipeEntry.defaultImagePath;
+  }
+
+  Future<void> _pickBackgroundImage() async {
+    final pickedFile = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+    );
+    final pickedPath = pickedFile?.path;
+    if (pickedPath == null) return;
+
+    final appDir = await getApplicationDocumentsDirectory();
+    final fileName =
+        '${DateTime.now().millisecondsSinceEpoch}_${path.basename(pickedPath)}';
+    final savedImage = await File(
+      pickedPath,
+    ).copy(path.join(appDir.path, fileName));
+
+    if (!mounted) return;
+    setState(() {
+      _imagePath = savedImage.path;
+    });
   }
 
   @override
@@ -70,11 +96,35 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Edit Recipe Entry')),
+      appBar: AppBar(
+        title: const Text('Edit Recipe Entry'),
+        actions: [
+          IconButton(
+            onPressed: _pickBackgroundImage,
+            icon: const Icon(Icons.add_photo_alternate),
+            tooltip: 'Add background photo',
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Container(
+                height: 140,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: _imagePath.startsWith('assets/')
+                        ? AssetImage(_imagePath)
+                        : FileImage(File(_imagePath)) as ImageProvider,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(labelText: 'Name'),
@@ -154,7 +204,7 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   'mealTypePlaceholder',
                   'cuisineTypePlaceholder',
                   ingredients,
-                  RecipeEntry.defaultImagePath,
+                  _imagePath,
                 );
               } else {
                 await Provider.of<RecipeEntryRepository>(
@@ -167,7 +217,7 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   _instructionsController.text,
                   "mealtype placeholder",
                   "cuisinetype placeholder",
-                  RecipeEntry.defaultImagePath,
+                  _imagePath,
                   ingredients,
                 );
               }

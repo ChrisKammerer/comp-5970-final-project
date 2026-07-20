@@ -14,13 +14,18 @@ class RecipeEntryCard extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(recipeEntry.imagePath),
+            image: recipeEntry.image,
             fit: BoxFit.cover,
           ),
         ),
         child: InkWell(
           onTap: () {
-            // Handle card tap, e.g., navigate to recipe details
+            // Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => RecipeEntryDetail(),
+            //     ),
+            //   );
           },
           child: Padding(
             padding: const EdgeInsets.all(16.0),
