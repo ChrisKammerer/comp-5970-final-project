@@ -7,7 +7,7 @@ const String mockRecipeEntriesJson = '''
     "instructions": "1. Slice the chicken. 2. Stir-fry with vegetables. 3. Add sauce and serve over rice.",
     "mealType": "Dinner",
     "cuisineType": "Asian",
-    "imagePath": "assets/images/default_recipe_image.png",
+    "imagePath": "",
     "ingredients": ["chicken", "broccoli", "carrot", "soy sauce", "garlic"]
   },
   {
@@ -17,7 +17,7 @@ const String mockRecipeEntriesJson = '''
     "instructions": "1. Boil pasta. 2. Roast vegetables. 3. Toss with olive oil and herbs.",
     "mealType": "Lunch",
     "cuisineType": "Italian",
-    "imagePath": "assets/images/default_recipe_image.png",
+    "imagePath": "",
     "ingredients": ["pasta", "zucchini", "bell pepper", "olive oil", "parmesan"]
   },
   {
@@ -27,7 +27,7 @@ const String mockRecipeEntriesJson = '''
     "instructions": "1. Layer yogurt and fruit. 2. Add granola. 3. Serve chilled.",
     "mealType": "Breakfast",
     "cuisineType": "Mediterranean",
-    "imagePath": "assets/images/default_recipe_image.png",
+    "imagePath": "",
     "ingredients": ["Greek yogurt", "berries", "granola", "honey", "almonds"]
   }
 ]

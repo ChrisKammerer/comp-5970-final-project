@@ -61,7 +61,7 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
       label: 'Ingredients',
       values: e != null ? e.ingredients : [],
     );
-    _imagePath = e?.imagePath ?? RecipeEntry.defaultImagePath;
+    _imagePath = e?.imagePath ?? '';
   }
 
   Future<void> _pickBackgroundImage() async {
@@ -95,6 +95,8 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDefaultImage = _imagePath.isEmpty;
+    final colorScheme = Theme.of(context).colorScheme;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Recipe Entry'),
@@ -115,13 +117,25 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
               child: Container(
                 height: 140,
                 decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: _imagePath.startsWith('assets/')
-                        ? AssetImage(_imagePath)
-                        : FileImage(File(_imagePath)) as ImageProvider,
-                    fit: BoxFit.cover,
-                  ),
+                  color: isDefaultImage ? colorScheme.primaryContainer : null,
+                  image: isDefaultImage
+                      ? null
+                      : DecorationImage(
+                          image: FileImage(File(_imagePath)),
+                          fit: BoxFit.cover,
+                        ),
                 ),
+                child: isDefaultImage
+                    ? Center(
+                        child: Icon(
+                          Icons.menu_book_rounded,
+                          size: 48,
+                          color: colorScheme.onPrimaryContainer.withValues(
+                            alpha: 0.5,
+                          ),
+                        ),
+                      )
+                    : null,
               ),
             ),
             const SizedBox(height: 12),
