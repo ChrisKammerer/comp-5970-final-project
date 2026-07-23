@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meal_organizer/services/recipe_entry_repository.dart';
+import 'package:meal_organizer/services/cuisine_type_repository.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../../models/recipe_entry.dart';
@@ -47,8 +48,10 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
   late final TextEditingController _nameController;
   late final TextEditingController _descriptionController;
   late final TextEditingController _instructionsController;
+  late final TextEditingController _cuisineTypeController;
   late final FieldControllerGroup _ingredientsGroup;
   late String _imagePath;
+  String? _mealType;
 
   @override
   void initState() {
@@ -57,11 +60,36 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
     _nameController = TextEditingController(text: e?.name);
     _descriptionController = TextEditingController(text: e?.description);
     _instructionsController = TextEditingController(text: e?.instructions);
+    _cuisineTypeController = TextEditingController(text: e?.cuisineType);
+    _cuisineTypeController.addListener(() => setState(() {}));
+    _mealType = e != null && RecipeEntry.mealTypeOptions.contains(e.mealType)
+        ? e.mealType
+        : null;
     _ingredientsGroup = FieldControllerGroup(
       label: 'Ingredients',
       values: e != null ? e.ingredients : [],
     );
     _imagePath = e?.imagePath ?? '';
+  }
+
+  Future<void> _selectCuisineType(
+    CuisineTypeRepository cuisineRepo,
+    String value,
+  ) async {
+    final trimmed = value.trim();
+    if (trimmed.isEmpty) return;
+
+    final exists = cuisineRepo.cuisineTypes.any(
+      (c) => c.toLowerCase() == trimmed.toLowerCase(),
+    );
+    if (!exists) {
+      await cuisineRepo.addCuisineType(trimmed);
+    }
+
+    _cuisineTypeController.value = TextEditingValue(
+      text: trimmed,
+      selection: TextSelection.collapsed(offset: trimmed.length),
+    );
   }
 
   Future<void> _pickBackgroundImage() async {
@@ -89,6 +117,7 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
     _nameController.dispose();
     _descriptionController.dispose();
     _instructionsController.dispose();
+    _cuisineTypeController.dispose();
     _ingredientsGroup.dispose();
     super.dispose();
   }
@@ -137,6 +166,50 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                       )
                     : null,
               ),
+            ),
+            const SizedBox(height: 12),
+            Consumer<CuisineTypeRepository>(
+              builder: (context, cuisineRepo, child) {
+                final query = _cuisineTypeController.text.trim();
+                final matchesExactly = cuisineRepo.cuisineTypes.any(
+                  (c) => c.toLowerCase() == query.toLowerCase(),
+                );
+                final entries = <DropdownMenuEntry<String>>[
+                  ...cuisineRepo.cuisineTypes.map(
+                    (c) => DropdownMenuEntry(value: c, label: c),
+                  ),
+                  if (query.isNotEmpty && !matchesExactly)
+                    DropdownMenuEntry(
+                      value: query,
+                      label: 'Add "$query"',
+                      leadingIcon: const Icon(Icons.add),
+                    ),
+                ];
+
+                return DropdownMenu<String>(
+                  controller: _cuisineTypeController,
+                  expandedInsets: EdgeInsets.zero,
+                  enableFilter: true,
+                  requestFocusOnTap: true,
+                  label: const Text('Cuisine Type'),
+                  dropdownMenuEntries: entries,
+                  onSelected: (value) {
+                    if (value == null) return;
+                    _selectCuisineType(cuisineRepo, value);
+                  },
+                );
+              },
+            ),
+            const SizedBox(height: 12),
+            DropdownMenu<String>(
+              initialSelection: _mealType,
+              expandedInsets: EdgeInsets.zero,
+              selectOnly: true,
+              label: const Text('Meal Type'),
+              dropdownMenuEntries: RecipeEntry.mealTypeOptions
+                  .map((type) => DropdownMenuEntry(value: type, label: type))
+                  .toList(),
+              onSelected: (value) => setState(() => _mealType = value),
             ),
             const SizedBox(height: 12),
             TextField(
@@ -215,8 +288,8 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   _nameController.text,
                   _descriptionController.text,
                   _instructionsController.text,
-                  'mealTypePlaceholder',
-                  'cuisineTypePlaceholder',
+                  _mealType ?? '',
+                  _cuisineTypeController.text.trim(),
                   ingredients,
                   _imagePath,
                 );
@@ -229,8 +302,8 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   _nameController.text,
                   _descriptionController.text,
                   _instructionsController.text,
-                  "mealtype placeholder",
-                  "cuisinetype placeholder",
+                  _mealType ?? '',
+                  _cuisineTypeController.text.trim(),
                   _imagePath,
                   ingredients,
                 );

@@ -96,4 +96,10 @@ class RecipeEntryRepository extends ChangeNotifier {
     await saveRecipeEntries(recipeEntries);
     notifyListeners();
   }
+
+  Future<void> deleteRecipeEntry(int id) async {
+    recipeEntries.removeWhere((recipe) => recipe.id == id);
+    await saveRecipeEntries(recipeEntries);
+    notifyListeners();
+  }
 }

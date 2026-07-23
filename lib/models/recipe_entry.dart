@@ -2,6 +2,14 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 
 class RecipeEntry {
+  static const List<String> mealTypeOptions = [
+    'Breakfast',
+    'Lunch',
+    'Dinner',
+    'Snack',
+    'Dessert',
+  ];
+
   final int id;
   final String name;
   final String description;

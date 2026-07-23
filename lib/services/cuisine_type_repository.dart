@@ -36,7 +36,19 @@ class CuisineTypeRepository extends ChangeNotifier {
     } else {
       cuisineTypes = cuisineTypesList;
     }
-    
+
+    notifyListeners();
+  }
+
+  Future<void> addCuisineType(String cuisineType) async {
+    final trimmed = cuisineType.trim();
+    if (trimmed.isEmpty) return;
+    if (cuisineTypes.any((c) => c.toLowerCase() == trimmed.toLowerCase())) {
+      return;
+    }
+
+    cuisineTypes = [...cuisineTypes, trimmed];
+    await saveCuisineTypes(cuisineTypes);
     notifyListeners();
   }
 }

@@ -1,6 +1,7 @@
 import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "../models/recipe_entry.dart";
+import "../screens/recipe_browse_screens/recipe_entry_detail_screen.dart";
 
 class RecipeEntryCard extends StatelessWidget {
   final RecipeEntry recipeEntry;
@@ -17,12 +18,13 @@ class RecipeEntryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
       child: InkWell(
         onTap: () {
-          // Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => RecipeEntryDetail(),
-          //     ),
-          //   );
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  RecipeEntryDetailScreen(recipeEntry: recipeEntry),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'services/settings_service.dart';
 import 'services/recipe_entry_repository.dart';
+import 'services/cuisine_type_repository.dart';
 import 'package:provider/provider.dart';
 import 'screens/welcome_screen.dart';
 
@@ -20,6 +21,9 @@ class MealOrganizer extends StatelessWidget {
         ),
         ChangeNotifierProvider<RecipeEntryRepository>(
           create: (context) => RecipeEntryRepository(),
+        ),
+        ChangeNotifierProvider<CuisineTypeRepository>(
+          create: (context) => CuisineTypeRepository(),
         ),
       ],
       child: Consumer<SettingsService>(
