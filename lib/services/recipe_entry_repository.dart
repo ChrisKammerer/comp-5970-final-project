@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/recipe_entry.dart';
-import 'mock_recipes.dart';
 
 class RecipeEntryRepository extends ChangeNotifier {
   static const String _storageKey = 'recipe_entries';
@@ -25,13 +24,7 @@ class RecipeEntryRepository extends ChangeNotifier {
     final recipeEntryListJson = prefs.getString(_storageKey);
 
     if (recipeEntryListJson == null) {
-      final List<dynamic> recipeEntryListMap = jsonDecode(
-        //TODO: replace this when done with project
-        mockRecipeEntriesJson,
-      );
-      recipeEntries = recipeEntryListMap
-          .map((entryMap) => RecipeEntry.fromMap(entryMap))
-          .toList();
+      recipeEntries = [];
       notifyListeners();
     } else {
       final List<dynamic> recipeEntryListMap = jsonDecode(recipeEntryListJson);
@@ -105,5 +98,11 @@ class RecipeEntryRepository extends ChangeNotifier {
     recipeEntries.removeWhere((recipe) => recipe.id == id);
     await saveRecipeEntries(recipeEntries);
     notifyListeners();
+  }
+
+  Future<void> resetToDefaults() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_storageKey);
+    await loadRecipeEntries();
   }
 }

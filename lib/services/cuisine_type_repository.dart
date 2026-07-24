@@ -51,4 +51,10 @@ class CuisineTypeRepository extends ChangeNotifier {
     await saveCuisineTypes(cuisineTypes);
     notifyListeners();
   }
+
+  Future<void> resetToDefaults() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_storageKey);
+    await loadCuisineTypes();
+  }
 }

@@ -175,8 +175,11 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                 final matchesExactly = cuisineRepo.cuisineTypes.any(
                   (c) => c.toLowerCase() == query.toLowerCase(),
                 );
+                final sortedCuisineTypes = [...cuisineRepo.cuisineTypes]..sort(
+                  (a, b) => a.toLowerCase().compareTo(b.toLowerCase()),
+                );
                 final entries = <DropdownMenuEntry<String>>[
-                  ...cuisineRepo.cuisineTypes.map(
+                  ...sortedCuisineTypes.map(
                     (c) => DropdownMenuEntry(value: c, label: c),
                   ),
                   if (query.isNotEmpty && !matchesExactly)
@@ -215,22 +218,31 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
             const SizedBox(height: 12),
             TextField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(
+                labelText: 'Name',
+                labelStyle: TextStyle(fontSize: 18),
+              ),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
               maxLines: 3,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                labelStyle: TextStyle(fontSize: 18),
+              ),
             ),
             const SizedBox(height: 8),
             TextField(
               controller: _instructionsController,
               maxLines: 4,
-              decoration: const InputDecoration(labelText: 'Instructions'),
+              decoration: const InputDecoration(
+                labelText: 'Instructions',
+                labelStyle: TextStyle(fontSize: 18),
+              ),
             ),
-            const SizedBox(height: 12),
-            const Text('Ingredients'),
+            const SizedBox(height: 50),
+            const Text('Ingredients', style: TextStyle(fontSize: 18)),
             const SizedBox(height: 12),
             ..._ingredientsGroup.controllers.asMap().entries.map((entry) {
               final index = entry.key;

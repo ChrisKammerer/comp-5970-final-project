@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'recipe_browse_screens/recipe_browse_screen.dart';
+import 'search_screen.dart';
 import 'settings_screen.dart';
 
 class MainContentView extends StatefulWidget {
@@ -15,7 +16,7 @@ class _MainContentViewState extends State<MainContentView> {
 
   final screens = [
     const RecipeBrowseScreen(),
-    const Placeholder(), // Replace with search screen
+    const SearchScreen(),
     const SettingsScreen(),
   ];
 

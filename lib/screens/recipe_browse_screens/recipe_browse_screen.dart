@@ -40,6 +40,11 @@ class RecipeCardBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<RecipeEntryRepository>(
       builder: (context, recipeRepo, child) {
+        if (recipeRepo.recipeEntries.isEmpty) {
+          return const Center(
+            child: Text('No recipes yet. Tap "Add Recipe" to create one.'),
+          );
+        }
         return GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
