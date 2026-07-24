@@ -25,7 +25,10 @@ class RecipeEntryRepository extends ChangeNotifier {
     final recipeEntryListJson = prefs.getString(_storageKey);
 
     if (recipeEntryListJson == null) {
-      final List<dynamic> recipeEntryListMap = jsonDecode(mockRecipeEntriesJson);
+      final List<dynamic> recipeEntryListMap = jsonDecode(
+        //TODO: replace this when done with project
+        mockRecipeEntriesJson,
+      );
       recipeEntries = recipeEntryListMap
           .map((entryMap) => RecipeEntry.fromMap(entryMap))
           .toList();
@@ -40,16 +43,16 @@ class RecipeEntryRepository extends ChangeNotifier {
     }
   }
 
-  Future<void> addRecipeEntry(
+  Future<RecipeEntry> addRecipeEntry(
     String name,
     String description,
     String instructions,
     String mealType,
     String cuisineType,
     List<String> ingredients,
-    String imagePath
+    String imagePath,
   ) async {
-    final nextId = recipeEntries.length+1;
+    final nextId = recipeEntries.length + 1;
     final newEntry = RecipeEntry(
       nextId,
       name,
@@ -64,6 +67,7 @@ class RecipeEntryRepository extends ChangeNotifier {
     recipeEntries.add(newEntry);
     await saveRecipeEntries(recipeEntries);
     notifyListeners();
+    return newEntry;
   }
 
   Future<void> updateRecipeEntry(

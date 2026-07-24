@@ -7,6 +7,7 @@ import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import '../../models/recipe_entry.dart';
 import 'package:provider/provider.dart';
+import 'recipe_entry_detail_screen.dart';
 
 class FieldControllerGroup {
   final String label;
@@ -281,17 +282,28 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   .toList();
 
               if (widget.recipeEntry == null) {
-                await Provider.of<RecipeEntryRepository>(
+                final newEntry =
+                    await Provider.of<RecipeEntryRepository>(
+                      context,
+                      listen: false,
+                    ).addRecipeEntry(
+                      _nameController.text,
+                      _descriptionController.text,
+                      _instructionsController.text,
+                      _mealType ?? '',
+                      _cuisineTypeController.text.trim(),
+                      ingredients,
+                      _imagePath,
+                    );
+
+                if (!context.mounted) return;
+
+                Navigator.pushReplacement(
                   context,
-                  listen: false,
-                ).addRecipeEntry(
-                  _nameController.text,
-                  _descriptionController.text,
-                  _instructionsController.text,
-                  _mealType ?? '',
-                  _cuisineTypeController.text.trim(),
-                  ingredients,
-                  _imagePath,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        RecipeEntryDetailScreen(recipeEntry: newEntry),
+                  ),
                 );
               } else {
                 await Provider.of<RecipeEntryRepository>(
@@ -307,11 +319,11 @@ class _RecipeEntryEditScreenState extends State<RecipeEntryEditScreen> {
                   _imagePath,
                   ingredients,
                 );
+
+                if (!context.mounted) return;
+
+                Navigator.pop(context);
               }
-
-              if (!context.mounted) return;
-
-              Navigator.pop(context);
             },
             label: Text("Save Recipe"),
           ),
